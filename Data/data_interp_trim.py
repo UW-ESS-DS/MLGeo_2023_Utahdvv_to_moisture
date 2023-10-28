@@ -39,8 +39,8 @@ if __name__ == '__main__':
     cols1=['ftime',  'temp_prism', 'ppt_prism', 'soil_nldas', 'snow_nldas', 'date']
     fn=root+'pretrim_'+stnm+'.csv'
     fi=pd.read_csv(fn,names=cols1,header=0)
-    temp = (np.array(fi["temp_prism"])-np.mean(fi["temp_prism"]))   #/np.max(np.abs(fi["temp"]-np.mean(fi["temp"])))
-    soil = (np.array(fi["soil_nldas"])-np.mean(fi["soil_nldas"]))   #/np.max(np.abs(fi["soil"]-np.mean(fi["soil"])))
+    temp = (np.array(fi["temp_prism"]))# -np.mean(fi["temp_prism"]))   #/np.max(np.abs(fi["temp"]-np.mean(fi["temp"])))
+    soil = (np.array(fi["soil_nldas"]))# -np.mean(fi["soil_nldas"]))   #/np.max(np.abs(fi["soil"]-np.mean(fi["soil"])))
     snow = np.array(fi["snow_nldas"]) #-np.mean(fi["snow_nldas"]))   
     ftime=np.array(fi["ftime"])
 
