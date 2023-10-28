@@ -109,19 +109,18 @@ if __name__ == '__main__':
     data_GSL=cs_gsl(utvec)[Ntb:Nte]
     data_UL=cs_ul(utvec)[Ntb:Nte]
 
-    fieldnames = ['utvec', 'dv','err','temp_degC','SM_EWT_meter','snow_EWT_meter','GSL_meter','UL_meter','date']
+    fieldnames = ['utvec', 'dv','err','temp','SM_EWT','snow_EWT','GSL','UL','date']
     fcsv="INTERP_"+stnm+".csv"
     data={
         'utvec': data_time,
         'dv': data_dv,
         'err': data_err,
-        'temp_degC':data_temp,
-        'SM_EWT_meter':data_soil,
-        'snow_EWT_meter':data_snow,
-        'GSL_meter':data_GSL,
-        'UL_meter':data_UL,
-        'date':data_date
-        
+        'temp':data_temp,
+        'SM_EWT':data_soil,
+        'snow_EWT':data_snow,
+        'GSL':data_GSL,
+        'UL':data_UL,
+        'date':data_date    
     }
     
     df=pd.DataFrame(data)
