@@ -11,7 +11,7 @@ The impacts of Climate change and city expansion on water resources have been no
 - Can we further predict near-surface hydrological variables based on seismic and temperature measurements? 
 
 ### Datasets
-The seismic measurements are the seismic velocity changes from Feng et al. (_in prep_). The soil moisture equivalent water thickness (EWT) data is from the North American Land Data Assimilation System project phase 2 (NLDAS-2; Xia et al., 2012ab; NLDAS phase-2, 2022). The temperature data is from the Parameter-elevation Relationships on Independent Slopes Model (PRISM) Gridded Climate Data (PRISM Climate Group, 2023). The Great Salt Lake (GSL) water level data is collected from the United States Geological Survey (USGS) (Site No. 10010100). The Utah Lake water level is estimated from the storage volume value obtained from the Snowpack Telemetry (SNOTEL) site, operated by the Natural Resources Conservation Service (NRCS) of the United States Department of Agriculture in the Western United States (https://www.nrcs.usda.gov/wps/portal/wcc/home/).  <br />
+The seismic measurements are the seismic velocity changes from Feng et al. (_in prep_). The soil moisture equivalent water thickness (EWT) data is from the North American Land Data Assimilation System project phase 2 (NLDAS-2; Xia et al., 2012ab; NLDAS phase-2, 2022). The temperature data is from the Parameter-elevation Relationships on Independent Slopes Model (PRISM) Gridded Climate Data (PRISM Climate Group, 2023).  <br />
 All these data above have been compiled as .csv files according to station locations.
 
 ### ML Method
