@@ -21,7 +21,7 @@ if __name__ == '__main__':
     #------------------------------------------------------#
     
     stnm=sys.argv[1] #'SPU'
-    root="../UU_csv_blank/"
+    root="../../Utah_dv_modeling/UU_csv_blank/"
     utvec=np.loadtxt(root+"time.lst",dtype=float)
     
     
@@ -44,20 +44,6 @@ if __name__ == '__main__':
     snow = np.array(fi["snow_nldas"]) #-np.mean(fi["snow_nldas"]))   
     ftime=np.array(fi["ftime"])
 
-    #---Read Lake data---# 
-    cols2=["utime","GSL","UL"]
-    root2="/home/kffeng/WORKs/Utah_dv_Paper/UU_hydro/"
-    fn2= root2+"Lakes.csv"
-    fi2 = pd.read_csv(fn2,names=cols2,header=0)
-    
-    utvec2=np.array(fi2["utime"])
-    GSL = np.array(fi2["GSL"]) #-np.mean(fi2["GSL"]))  #/np.max(np.abs(fi2["GSL"]-np.mean(fi2["GSL"])))
-    UL  = np.array(fi2["UL"])  #-np.mean(fi2["UL"]))   #/np.max(np.abs(fi2["UL"]-np.mean(fi2["UL"])))
-    
-    #gwf=root2+"DUG_well.tmp"
-    #gwt,dep2gw =np.loadtxt(gwf,delimiter=' ',unpack=True)
-    #DEP2GW=(dep2gw-np.mean(dep2gw))/np.max(np.abs(dep2gw-np.mean(dep2gw)))
-    
     #------------------------------------------------------#
     intdv = np.interp(utvec, t2, dvv)
     fint = interp1d(utvec, intdv)
@@ -67,19 +53,10 @@ if __name__ == '__main__':
     fcsm = make_interp_spline(t2, dvv)
     cs_err = CubicSpline(t2, err)
     
-    intGSL = np.interp(utvec, utvec2,GSL)
-    intUL =  np.interp(utvec, utvec2,UL)
-    
-    cs_gsl=CubicSpline(utvec2, GSL)
-    cs_ul=CubicSpline(utvec2, UL)
     cs_temp=CubicSpline(ftime,temp)
     cs_soil=CubicSpline(ftime,soil)
     cs_snow=CubicSpline(ftime,snow)
-    
-    #intgw=np.interp(utvec, gwt,DEP2GW)
-    #gwcs=CubicSpline(gwt,DEP2GW)
-    
-    
+
     # --- define begin and end time
     tb=t2[0]
     te=t2[-1]
@@ -104,12 +81,9 @@ if __name__ == '__main__':
     data_err=cs_err(utvec)[Ntb:Nte]
     data_temp=cs_temp(utvec)[Ntb:Nte]
     data_soil=cs_soil(utvec)[Ntb:Nte]
-    data_snow=cs_snow(utvec)[Ntb:Nte]
-    #data_gw=gwcs(utvec)[Ntb:Nte]
-    data_GSL=cs_gsl(utvec)[Ntb:Nte]
-    data_UL=cs_ul(utvec)[Ntb:Nte]
 
-    fieldnames = ['utvec', 'dv','err','temp','SM_EWT','snow_EWT','GSL','UL','date']
+
+    fieldnames = ['utvec', 'dv','err','temp','SM_EWT','date']
     fcsv="INTERP_"+stnm+".csv"
     data={
         'utvec': data_time,
@@ -117,9 +91,6 @@ if __name__ == '__main__':
         'err': data_err,
         'temp':data_temp,
         'SM_EWT':data_soil,
-        'snow_EWT':data_snow,
-        'GSL':data_GSL,
-        'UL':data_UL,
         'date':data_date    
     }
     
@@ -128,11 +99,11 @@ if __name__ == '__main__':
     
     print("plotting ")
     #---plot dv/v for the debug---#
-    fig, ax = plt.subplots(6, 1, figsize=(6,12))
+    fig, ax = plt.subplots(3, 1, figsize=(6,6))
     
-    for k in range(0,6):
+    for k in range(0,3):
         ax[k].set_xlim(data_time[0],data_time[-1])
-        #ax[k].set_ylim(-1,1)
+        ax[k].grid(True)
     
     #ax[0].set_ylim(-1,1)
     
@@ -140,37 +111,20 @@ if __name__ == '__main__':
     #ax[0].plot(data_time,data_dv,'-',c='m')
     ax[0].plot(data_time,fcs(utvec)[Ntb:Nte],'-',c='m')
     ax[0].plot(data_time,fcsp(utvec)[Ntb:Nte],c='b',linewidth=5,alpha=0.5)
-    ax[0].plot(data_time,fcsm(utvec)[Ntb:Nte],'--',c='cyan',linewidth=1)
+    #ax[0].plot(data_time,fcsm(utvec)[Ntb:Nte],'--',c='cyan',linewidth=1)
     ax[0].set_title(stnm)
     
     ax[1].plot(ftime,temp,  ls="-", c = "orange",linewidth=5,alpha=0.5)
     ax[1].plot(data_time,data_temp,  ls="-", c = "r")
-    ax[1].set_title(" temp")
+    ax[1].set_title("Temperature (C)")
     
     ax[2].plot(ftime,soil,  ls="-", c = "blue",linewidth=5,alpha=0.5)
     ax[2].plot(data_time,data_soil,  ls="-", c = "cyan")
-    ax[2].set_title(" soil EWT (m)")
+    ax[2].set_title("Soil moisture EWT (m)")
     
-    ax[3].plot(ftime,snow,  ls="-", c = "blue",linewidth=5,alpha=0.5)
-    ax[3].plot(data_time,data_snow,  ls="-", c = "cyan")
-    ax[3].set_title(" snow EWT (m)")
-    
-    ax[4].plot(utvec,intGSL,  ls="-", c = "b",linewidth=5,alpha=0.5)
-    ax[4].plot(data_time,data_GSL,  ls="-", c = "k")
-    ax[4].set_title(" Great Salt Lake water level")
-    
-    ax[5].plot(utvec,intUL,  ls="-", c = "lime",linewidth=5,alpha=0.5)
-    ax[5].plot(data_time,data_UL,  ls="-", c = "b")
-    ax[5].set_title(" Utah Lake water level")
-    '''
-    ax[5].plot(utvec,intgw,  ls="-", c = "grey",linewidth=5,alpha=0.5)
-    ax[5].plot(gwt,DEP2GW,  "o", c = "k")
-    ax[5].plot(data_time,data_gw,  ls="-", c = "b")
-    ax[5].set_title(" groundwater level (DUG)")
-    '''
     plt.tight_layout()
     print("save")
-    plt.savefig(output_imgdir+"/TSdvv_%s.png"%(stnm), format="png", dpi=100)
+    plt.savefig(output_imgdir+"/Data_%s.png"%(stnm), format="png", dpi=100)
     plt.close()
     print("close")
     plt.clf()
