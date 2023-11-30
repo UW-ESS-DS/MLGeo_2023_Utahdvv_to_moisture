@@ -15,8 +15,6 @@ The seismic measurements are the seismic velocity changes from Feng et al. (_in 
 All these data above have been compiled as .csv files according to station locations.
 
 ### ML Method
-TBD.
-Random Forest
 Neural Network
 
 ### Model Training 
